@@ -1,0 +1,484 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: 'Switzer', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --color-porcelain: #F4F1EA;
+  --color-warm-white: #FAF9F6;
+  --color-charcoal: #181816;
+  --color-graphite: #5E5B55;
+  --color-stone-border: #D9D5CC;
+  --color-forest: #18352C;
+  --color-forest-hover: #22473C;
+  --color-brass: #B08A4A;
+  --color-sage: #3F765A;
+  --color-amber-muted: #A97832;
+  --color-burgundy: #8F4A4A;
+  --color-slate-muted: #526579;
+}
+
+/* Local Switzer Font Family Declarations */
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Thin.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Thin.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ThinItalic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ThinItalic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Extralight.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Extralight.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Extralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ExtralightItalic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ExtralightItalic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ExtralightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Light.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Light.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-LightItalic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-LightItalic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Regular.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Regular.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Italic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Italic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Medium.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Medium.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-MediumItalic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-MediumItalic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Semibold.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Semibold.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-SemiboldItalic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-SemiboldItalic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-SemiboldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Bold.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Bold.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-BoldItalic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-BoldItalic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Extrabold.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Extrabold.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Extrabold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ExtraboldItalic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ExtraboldItalic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-ExtraboldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Black.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Black.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-BlackItalic.woff2') format('woff2'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-BlackItalic.woff') format('woff'),
+       url('/Switzer_Complete/Fonts/WEB/fonts/Switzer-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+  }
+
+  body {
+    background-color: #0c0d10;
+    color: #f1f5f9;
+    font-family: 'Switzer', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Switzer', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 300; /* Crisp, non-heavy elegant font weight */
+    letter-spacing: -0.025em;
+  }
+
+  h1 {
+    font-weight: 300 !important; /* Force light/normal weight for h1, removing harsh bold AI-slop */
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0c0d10;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* --- COMPONENT CARD STYLING FROM PROMPT --- */
+.card {
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #1c1c21 0%, #131417 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 32px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.9), 
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+.card.blue {
+  background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.12) 0%, rgba(28, 28, 33, 0) 60%), linear-gradient(135deg, #1c1c21 0%, #131417 100%);
+  border-color: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8),
+              0 0 50px -10px rgba(59, 130, 246, 0.15),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.card.green {
+  background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.12) 0%, rgba(28, 28, 33, 0) 60%), linear-gradient(135deg, #1c1c21 0%, #131417 100%);
+  border-color: rgba(16, 185, 129, 0.25);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8),
+              0 0 50px -10px rgba(16, 185, 129, 0.15),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.card.red {
+  background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.12) 0%, rgba(28, 28, 33, 0) 60%), linear-gradient(135deg, #1c1c21 0%, #131417 100%);
+  border-color: rgba(239, 68, 68, 0.25);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8),
+              0 0 50px -10px rgba(239, 68, 68, 0.15),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.card-header {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 20;
+}
+
+.card .close {
+  color: #6b7280;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card .close:hover {
+  color: #f3f4f6;
+  transform: scale(1.1);
+}
+
+.card-body {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  z-index: 10;
+  position: relative;
+  width: 100%;
+}
+
+.card .icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card.blue .icon {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.card.green .icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.card.red .icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.card-body h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+}
+
+.card-body p {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.card .progress {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 24px;
+  width: 100%;
+}
+
+/* For dynamic file status actions bottom row */
+.card > .progress {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.card .progress > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.card .progress span {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  align-self: flex-end;
+}
+
+.card .progress-bar {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: #27272a;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.card .progress-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: var(--progress-width, 0%);
+  background: #3b82f6;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.card.green .progress-bar::after {
+  background: #10b981;
+}
+
+.card.red .progress-bar::after {
+  background: #ef4444;
+}
+
+/* Let's style action buttons to match the exact premium 21st.dev style in the screenshot */
+.card .btn-first {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Blue uploading Cancel button */
+.card.blue .progress .btn-first {
+  background: #27272a;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card.blue .progress .btn-first:hover {
+  background: #3f3f46;
+}
+
+/* Success primary button */
+.card.green .progress .btn-first {
+  background: #ffffff;
+  color: #09090b;
+}
+
+.card.green .progress .btn-first:hover {
+  background: #e4e4e7;
+}
+
+/* Error primary button */
+.card.red .progress .btn-first {
+  background: #ffffff;
+  color: #09090b;
+}
+
+.card.red .progress .btn-first:hover {
+  background: #e4e4e7;
+}
+
+.card .btn-second {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e4e4e7;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.card .btn-second:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+

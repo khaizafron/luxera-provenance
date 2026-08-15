@@ -1,0 +1,8 @@
+{
+  "name": "Luxera Provenance",
+  "description": "Enterprise Source of Wealth (SoW) compliance intelligence and evidence platform",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
