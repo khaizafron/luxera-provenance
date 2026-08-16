@@ -441,7 +441,7 @@ Compliance officers can inspect raw vs redacted document text, review specific r
 ```
 luxera-provenance/
 ├── .DOCS/                     # Statutory compliance reference materials & legal docs
-├── app/                       # Next.js 16 App Router directory
+├── app/                       # Next.js 15 App Router directory
 │   ├── api/                   # Server-side API Routes
 │   │   ├── cases/             # Case management, upload & process endpoints
 │   │   ├── compliance/        # DSAR export & audit chain verification endpoints
@@ -469,7 +469,7 @@ luxera-provenance/
 │   │   ├── pii-redactor.ts    # Regex-based pre-LLM PII masking
 │   │   └── sow-engine.ts      # Deterministic rules & Gemini AI engine
 │   └── db/
-│       └── store.ts           # Persistent local compliance store & default seed
+│       └── store.ts           # Persistent in-memory compliance store & default seed
 ├── public/                    # Static branding & asset directory
 │   ├── main-logo.png          # Luxera main logo mark
 │   └── provenance-logo.png    # Luxera Provenance product branding logo
@@ -554,7 +554,7 @@ Refer to `.env.example` to configure environment keys:
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-> 💡 **Self-Contained Architecture Note**: The historical external workflow specification is retained inside `.DOCS/JSON/` purely as reference material. Luxera Provenance implements this pipeline natively in application code, removing n8n as a runtime requirement.
+> 💡 **Self-Contained Architecture Note**: The original Wahed SoW n8n workflow specification is retained inside `.DOCS/JSON/` purely as a reference and source specification. Luxera Provenance implements this entire pipeline natively in application code, removing n8n as a runtime requirement.
 
 ---
 
@@ -623,7 +623,6 @@ Luxera Provenance utilizes an **Institutional Financial Aesthetics** design lang
 Luxera Provenance operates as the specialized financial evidence and compliance intelligence pillar within the broader **Luxera Cognitive Resources** product family:
 
 - **Luxera Provenance**: Financial evidence, Source of Wealth compliance, PII sanitization, and SHA-256 audit infrastructure.
-- **Portfolio Intelligence**: Client import, exposure snapshotting, linked case creation, and portfolio status tracking.
 - **Luxera Outreach Intelligence Platform**: B2B revenue intelligence, AI-powered lead discovery, and outbound campaign automation.
 - **Kalman Lumiere / Ownsify**: Proprietary decision and resource optimization systems developed under the Luxera ecosystem.
 
@@ -653,8 +652,7 @@ By turning raw, noisy documents into structured intelligence, organizations achi
 - [x] Server-side Gemini 2.5 Flash Multimodal Document Extraction.
 - [x] Cryptographic SHA-256 Hash Chained Audit Ledger with live verification API.
 - [x] Human-in-the-Loop Officer Override Console.
-- [x] Portfolio client import, case linkage, and portfolio financial consistency evaluation.
-- [x] Native SoW compliance workflow with standalone and portfolio intake modes.
+- [x] Native Reimplementation of Wahed SoW Compliance Workflow.
 
 ### Next Phase (`v0.2.0` - In Development)
 - [ ] PostgreSQL / Supabase persistent database adapter via Drizzle ORM.

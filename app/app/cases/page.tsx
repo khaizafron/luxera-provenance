@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { PlusCircle, Search, Filter, FolderKanban, ArrowUpRight } from 'lucide-react';
 import { SpotlightCard } from '@/components/ui/spotlight-card';
+import { RiskScorePill, StatusPill } from '@/components/ui/case-outcome-pill';
 
 export default function CasesPage() {
   const [cases, setCases] = useState<any[]>([]);
@@ -62,7 +63,7 @@ export default function CasesPage() {
       </div>
 
       {/* Filter Bar */}
-      <SpotlightCard className="p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <SpotlightCard className="p-4 flex flex-col md:flex-row gap-4 items-center justify-between" showIcon={false} showClose={false}>
         <div className="relative w-full md:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
           <input
@@ -93,8 +94,19 @@ export default function CasesPage() {
       </SpotlightCard>
 
       {/* Table */}
-      <SpotlightCard className="p-6 overflow-x-auto">
-        <table className="w-full text-left text-xs">
+      <SpotlightCard className="p-6" showIcon={false} showClose={false}>
+        <div className="overflow-x-auto pb-2">
+        <table className="w-max min-w-[1180px] table-fixed text-left text-xs">
+          <colgroup>
+            <col className="w-[110px]" />
+            <col className="w-[140px]" />
+            <col className="w-[130px]" />
+            <col className="w-[120px]" />
+            <col className="w-[230px]" />
+            <col className="w-[130px]" />
+            <col className="w-[130px]" />
+            <col className="w-[140px]" />
+          </colgroup>
           <thead className="bg-[#05070a] text-slate-400 font-mono uppercase text-[10px] tracking-wider border-b border-slate-800/80">
             <tr>
               <th className="p-3.5 font-normal">Case ID</th>
@@ -131,43 +143,17 @@ export default function CasesPage() {
                   </td>
                   <td className="p-3.5 text-slate-300 font-normal">{c.employer_name}</td>
                   <td className="p-3.5">
-                    <span
-                      className={`inline-block px-2.5 py-1 rounded-md font-mono text-[10px] tracking-wider font-medium border ${
-                        c.status === 'INSUFFICIENT_INFORMATION'
-                          ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
-                          : (c.composite_risk_score || 0) >= 50
-                          ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
-                          : (c.composite_risk_score || 0) >= 25
-                          ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                          : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                      }`}
-                    >
-                      {c.composite_risk_score ?? 0} / 100
-                    </span>
+                    <RiskScorePill score={c.composite_risk_score ?? 0} />
                   </td>
                   <td className="p-3.5">
-                    <span
-                      className={`inline-block px-2.5 py-1 rounded-md text-[10px] font-mono tracking-wider font-medium border ${
-                        c.status === 'APPROVED'
-                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                          : c.status === 'REJECTED'
-                          ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
-                          : c.status === 'MANUAL_REVIEW_REQUIRED'
-                          ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                          : c.status === 'INSUFFICIENT_INFORMATION'
-                          ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
-                          : 'bg-slate-800/80 text-slate-300 border-slate-700'
-                      }`}
-                    >
-                      {c.status}
-                    </span>
+                    <StatusPill status={c.status} />
                   </td>
-                  <td className="p-3.5 text-right">
+                  <td className="p-3.5 text-center">
                     <Link
                       href={`/app/cases/${c.id}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-[11px] font-normal transition-all group-hover:border-amber-500/40"
+                      className="inline-flex w-[104px] items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-[11px] font-normal transition-all group-hover:border-amber-500/40"
                     >
-                      <span>Inspect Case</span>
+                      <span>Inspect</span>
                       <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
                     </Link>
                   </td>
@@ -176,6 +162,7 @@ export default function CasesPage() {
             )}
           </tbody>
         </table>
+        </div>
       </SpotlightCard>
     </div>
   );

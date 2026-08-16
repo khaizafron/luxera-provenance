@@ -209,8 +209,8 @@ Institusi kewangan dan pengurus kekayaan menghadapi geseran operasi yang teruk a
 
 ```mermaid
 graph TD
-    User[Penyemak Imbas / Konsol Pegawai] -->|HTTPS / Next.js App Router| Frontend[Lapisan Klien Next.js 16]
-    Frontend -->|Panggilan API / Tindakan Pelayan| Server[Lapisan Pelayan Next.js 16]
+    User[Penyemak Imbas / Konsol Pegawai] -->|HTTPS / Next.js App Router| Frontend[Lapisan Klien Next.js 15]
+    Frontend -->|Panggilan API / Tindakan Pelayan| Server[Lapisan Pelayan Next.js 15]
     
     subgraph Sempadan Privasi & Keselamatan
         Server -->|Teks Dokumen Mentah| PII[Enjin Sanitasi PII]
@@ -403,7 +403,7 @@ Pegawai pematuhan boleh memeriksa teks dokumen mentah lwn disanitasi, menyemak k
 ```
 luxera-provenance/
 ├── .DOCS/                     # Bahan rujukan pematuhan berkanun & dokumen perundangan
-├── app/                       # Direktori Next.js 16 App Router
+├── app/                       # Direktori Next.js 15 App Router
 │   ├── api/                   # Laluan API sebelah pelayan
 │   │   ├── cases/             # Titik akhir pengurusan kes, muat naik & pemprosesan
 │   │   ├── compliance/        # Titik akhir eksport DSAR & pengesahan rantaian audit
@@ -517,7 +517,7 @@ Rujuk `.env.example` untuk mengkonfigurasi kunci persekitaran:
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-> 💡 **Nota Seni Bina Kendiri (Self-Contained)**: Spesifikasi aliran kerja luaran yang bersejarah dikekalkan di dalam `.DOCS/JSON/` semata-mata sebagai rujukan. Luxera Provenance melaksanakan keseluruhan talian paip (pipeline) ini secara asli (native) dalam kod aplikasi, menghapuskan keperluan masa jalanan n8n.
+> 💡 **Nota Seni Bina Kendiri (Self-Contained)**: Spesifikasi aliran kerja n8n asal Wahed SoW dikekalkan di dalam `.DOCS/JSON/` semata-mata sebagai rujukan dan spesifikasi sumber. Luxera Provenance melaksanakan keseluruhan talian paip (pipeline) ini secara asli (native) dalam kod aplikasi, menghapuskan keperluan masa jalanan n8n.
 
 ---
 

@@ -1,12 +1,12 @@
 # Native Compliance Engine & n8n Parity Matrix
 ## Luxera Provenance Forensic Audit & Specification Validation
 
-This document presents a complete forensic parity audit between the original standalone workflow specification (`.DOCS/JSON/SoW Compliance Agent.json`) and the fully integrated **self-hostable native SoW compliance engine** within the Luxera Provenance application framework.
+This document presents a complete forensic parity audit between the original standalone n8n workflow specification (`.DOCS/JSON/Wahed - Source of Wealth (SoW) Compliance Agent.json`) and the fully integrated **self-hostable native SoW compliance engine** within the Luxera Provenance application framework.
 
 ---
 
 ## 1. Executive Summary & Verification Flow
-Luxera Provenance implements a zero-dependency runtime execution pipeline where all triggers, ingestion, sanitization, parsing, deterministic evaluation, decisioning, and logging are performed natively inside Next.js 16 application code, completely bypassing any operational reliance on an external n8n instance.
+Luxera Provenance implements a zero-dependency runtime execution pipeline where all triggers, ingestion, sanitization, parsing, deterministic evaluation, decisioning, and logging are performed natively inside Next.js 15 application code, completely bypassing any operational reliance on an external n8n instance.
 
 The execution flow matches the original n8n DAG precisely:
 

@@ -93,6 +93,18 @@ export function Sidebar({
     router.refresh();
   };
 
+  const isNavItemActive = (href: string) => {
+    if (pathname === href) return true;
+
+    if (href === '/app') return false;
+
+    if (href === '/app/cases') {
+      return pathname.startsWith('/app/cases/') && pathname !== '/app/cases/new';
+    }
+
+    return pathname.startsWith(`${href}/`);
+  };
+
   const navContent = (
     <div className="flex flex-col h-full bg-[#0f1013] border-r border-slate-800 text-slate-100">
       <div className="h-16 px-4 border-b border-slate-800 flex items-center justify-between shrink-0">
@@ -142,9 +154,7 @@ export function Sidebar({
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
-          const isActive =
-            pathname === item.href ||
-            (item.href !== '/app' && pathname.startsWith(item.href));
+          const isActive = isNavItemActive(item.href);
 
           return (
             <Link

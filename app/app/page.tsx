@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { SpotlightCard } from '@/components/ui/spotlight-card';
 import { UploadCard } from '@/components/ui/upload-ui';
+import { RiskScorePill, StatusPill } from '@/components/ui/case-outcome-pill';
 
 export default function DashboardPage() {
   const [cases, setCases] = useState<any[]>([]);
@@ -368,7 +369,16 @@ export default function DashboardPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full table-fixed text-left text-xs">
+            <colgroup>
+              <col className="w-[10%]" />
+              <col className="w-[13%]" />
+              <col className="w-[12%]" />
+              <col className="w-[22%]" />
+              <col className="w-[13%]" />
+              <col className="w-[13%]" />
+              <col className="w-[17%]" />
+            </colgroup>
             <thead className="bg-[#080c14] text-slate-400 font-mono uppercase text-[10px] tracking-wider border-b border-slate-800/80">
               <tr>
                 <th className="p-3.5 font-normal">Case ID</th>
@@ -403,39 +413,15 @@ export default function DashboardPage() {
                     </td>
                     <td className="p-3.5 text-slate-300 font-normal">{c.employer_name}</td>
                     <td className="p-3.5">
-                      <span
-                        className={`inline-block px-2.5 py-1 rounded-md font-mono text-[10px] tracking-wider font-medium border ${
-                          (c.composite_risk_score || 0) >= 50
-                            ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
-                            : (c.composite_risk_score || 0) >= 25
-                            ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                        }`}
-                      >
-                        {c.composite_risk_score ?? 0} / 100
-                      </span>
+                      <RiskScorePill score={c.composite_risk_score ?? 0} />
                     </td>
                     <td className="p-3.5">
-                      <span
-                        className={`inline-block px-2.5 py-1 rounded-md text-[10px] font-mono tracking-wider font-medium border ${
-                          c.status === 'APPROVED'
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                            : c.status === 'REJECTED'
-                            ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
-                            : c.status === 'MANUAL_REVIEW_REQUIRED'
-                            ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                            : c.status === 'INSUFFICIENT_INFORMATION'
-                            ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
-                            : 'bg-slate-800/80 text-slate-300 border-slate-700'
-                        }`}
-                      >
-                        {c.status}
-                      </span>
-                    </td>
-                    <td className="p-3.5 text-right">
+                    <StatusPill status={c.status} />
+                  </td>
+                    <td className="p-3.5 text-left">
                       <Link
                         href={`/app/cases/${c.id}`}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-[11px] font-normal transition-all group-hover:border-amber-500/40"
+                        className="inline-flex w-[106px] items-center justify-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-[11px] font-normal transition-all group-hover:border-amber-500/40"
                       >
                         <span>Inspect</span>
                         <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
