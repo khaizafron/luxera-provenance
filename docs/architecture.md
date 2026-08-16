@@ -8,8 +8,8 @@ This document provides a detailed technical overview of the architecture, compon
 
 ```mermaid
 graph TD
-    User[Client Browser / Officer Console] -->|HTTPS / Next.js App Router| Frontend[Next.js 15 Client Layer]
-    Frontend -->|API Calls / Server Actions| Server[Next.js 15 Server Layer]
+    User[Client Browser / Officer Console] -->|HTTPS / Next.js App Router| Frontend[Next.js 16 Client Layer]
+    Frontend -->|API Calls / Server Actions| Server[Next.js 16 Server Layer]
     
     subgraph Privacy & Security Boundary
         Server -->|Raw Document Text| PII[PII Sanitization Engine]
@@ -24,7 +24,7 @@ graph TD
     end
     
     subgraph Compliance & Storage Layer
-        Rules -->|Risk Score & Flags| Store[(In-Memory / Persistent Store)]
+        Rules -->|Risk Score & Flags| Store[(Local Persistent Store)]
         Rules -->|Payload & Meta| Ledger[Cryptographic SHA-256 Ledger]
         Ledger -->|Linked Audit Blocks| Store
     end
@@ -36,7 +36,7 @@ graph TD
 
 ## 2. Component Subsystems
 
-### 2.1 Next.js 15 Full-Stack Core
+### 2.1 Next.js 16 Full-Stack Core
 - **App Router (`app/`)**: Handles UI routing, server rendering, client interactive state, and API routes.
 - **Server API Routes (`app/api/`)**: Enforces server-side execution for document handling, PII redaction, AI processing, officer decision overrides, and DSAR export.
 
@@ -70,5 +70,5 @@ graph TD
 ---
 
 ## 3. Data Storage & Persistence Model (`lib/db/store.ts`)
-- Currently utilizes a persistent in-memory compliance store seeded with realistic default compliance cases, documents, and audit trails.
+- Currently utilizes a persistent local compliance store seeded with realistic default compliance cases, documents, and audit trails.
 - Designed for seamless adaptation to PostgreSQL / Supabase adapters via ORM layers.

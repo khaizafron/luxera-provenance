@@ -5,7 +5,7 @@
 
 ## 1. Executive Context
 
-**Luxera Provenance** is deployed as an enterprise multi-tenant software-as-a-service (SaaS) and private cloud platform. Financial institutions (Reporting Entities under AMLA, such as banks, wealth management platforms, and fintechs like Wahed) subscribe to Luxera Provenance to automate and govern their customer **Source of Wealth (SoW)** verification workflows.
+**Luxera Provenance** is deployed as an enterprise multi-tenant software-as-a-service (SaaS) and private cloud platform. Financial institutions (Reporting Entities under AMLA, such as banks, wealth management platforms, and digital finance operators) subscribe to Luxera Provenance to automate and govern their customer **Source of Wealth (SoW)** verification workflows.
 
 ---
 

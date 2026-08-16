@@ -1,11 +1,11 @@
 # N8N Workflow Architecture & Deep Analysis
-## Source Engine: Wahed - Source of Wealth (SoW) Compliance Agent
+## Source Engine: Historical Source of Wealth (SoW) Compliance Agent
 
 ---
 
 ## 1. Executive Summary
 
-The **Wahed Source of Wealth (SoW) Compliance Agent** is an automated n8n workflow designed to process customer financial documents (e.g., salary slips, bank statements, tax filings, asset declarations), extract structured income and source data using Large Language Models (OpenAI GPT-4/GPT-3.5), and evaluate the extracted data against deterministic compliance rules to determine SoW verification status.
+The historical Source of Wealth (SoW) Compliance Agent is an automated n8n workflow designed to process customer financial documents (e.g., salary slips, bank statements, tax filings, asset declarations), extract structured income and source data using Large Language Models (OpenAI GPT-4/GPT-3.5), and evaluate the extracted data against deterministic compliance rules to determine SoW verification status.
 
 The workflow acts as an automated first-line compliance screener for Islamic wealth management and fintech onboarding, validating whether a customer's declared wealth is legitimate, financially consistent with their supporting documentation, and compliant with Anti-Money Laundering (AML) / Source of Wealth requirements.
 

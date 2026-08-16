@@ -1,5 +1,5 @@
 # N8N Workflow Changelog & Modifications
-## Wahed - Source of Wealth (SoW) Compliance Agent
+## Historical Source of Wealth (SoW) Compliance Agent
 
 ---
 

@@ -6,16 +6,16 @@
 
 ### Financial Evidence & Compliance Intelligence Infrastructure
 
-**Open-source Source of Wealth (SoW) compliance infrastructure for fintechs, Islamic wealth managers, financial institutions, and compliance operations.**
+**Open-source Source of Wealth (SoW) compliance infrastructure for portfolio-linked client intelligence, financial evidence verification, and compliance operations.**
 
 ---
 
 [![Language](https://img.shields.io/badge/Language-English%20%7C%20Bahasa%20Melayu-blue.svg)](#-language--bahasa)
 [![License](https://img.shields.io/badge/License-Apache_2.0-emerald.svg)](LICENSE)
-[![Framework](https://img.shields.io/badge/Framework-Next.js_15-black.svg)](https://nextjs.org)
+[![Framework](https://img.shields.io/badge/Framework-Next.js_16.3-black.svg)](https://nextjs.org)
 [![Language](https://img.shields.io/badge/Language-TypeScript_5.9-blue.svg)](https://www.typescriptlang.org)
 [![AI Engine](https://img.shields.io/badge/AI%20Engine-Google%20Gemini%202.5%20Flash-violet.svg)](https://ai.google.dev)
-[![Compliance](https://img.shields.io/badge/Compliance-PDPA_Act_709_Compliant-amber.svg)](https://www.pdp.gov.my)
+[![Compliance](https://img.shields.io/badge/Compliance-PDPA_Act_709_Privacy_Controls-amber.svg)](https://www.pdp.gov.my)
 [![Status](https://img.shields.io/badge/Status-Open%20Source-green.svg)]()
 
 ---
@@ -68,7 +68,7 @@
 ### Key Technical & Product Highlights
 - **Pre-LLM PII Sanitization Engine**: Automatic, deterministic masking of sensitive personal identifiers (Malaysian NRIC, passport numbers, bank account/credit card numbers, email addresses, and phone numbers) before data is processed by AI models, adhering strictly to Malaysia's Personal Data Protection Act 2010 (PDPA Act 709 Section 9).
 - **Deterministic Financial Consistency Rules**: Rule-based validation enforcing mathematical thresholds—including 12-month deposit-to-annual-salary ratios (threshold $\le 1.25\times$), employer name fuzzy matching, and document freshness checks—preventing hallucinated or ambiguous AI decisions.
-- **Multimodal OCR & Document Extraction**: Server-side document processing powered by Google Gemini 2.5 Flash via `@google/genai` TypeScript SDK, running on a fully self-contained native compliance engine without external dependencies.
+- **Multimodal OCR & Document Extraction**: Server-side document processing powered by Google Gemini 2.5 Flash via `@google/genai` TypeScript SDK, with a deterministic fallback path when AI credentials are unavailable.
 - **SHA-256 Cryptographic Hash Chained Audit Ledger**: Tamper-evident ledger linking every case creation, document ingestion, rule evaluation, and human compliance officer override into a verifiable, mathematically linked hash chain.
 - **Human-in-the-Loop (HITL) Decisioning**: A dedicated compliance officer console enabling manual review, risk point evaluation, override justifications, and statutory consent tracking. AI assists and synthesizes findings; human authority makes the ultimate compliance determination.
 
@@ -155,7 +155,19 @@ Financial institutions and wealth managers face severe operational friction when
 - 🔗 **SHA-256 Cryptographic Hash Chained Audit Trail**: Every case operation generates a linked audit block containing `sequence_id`, `previous_block_hash`, `payload_hash`, timestamp, actor email, and `block_hash`. Includes real-time mathematical integrity verification.
 - 🛡️ **Human-in-the-Loop (HITL) Officer Console**: Interactive UI for compliance officers to review risk flags, inspect redacted vs raw evidence text, input override justifications, and issue binding compliance verdicts (`APPROVED`, `MANUAL_REVIEW_REQUIRED`, `REJECTED`).
 - 📑 **Data Subject Access Request (DSAR) Engine**: Instant generation of structured JSON compliance dossiers adhering to Section 12 of PDPA Act 709.
-- ⚡ **Native SoW Verification Engine**: Built-in compliance execution system that converts and runs the Wahed Source of Wealth (SoW) compliance workflow natively within application code, combining local deterministic verification with optional server-side Gemini AI analysis.
+- ⚡ **Native SoW Verification Engine**: Built-in compliance execution system that runs the Source of Wealth workflow natively within application code, combining local deterministic verification with optional server-side Gemini AI analysis.
+
+### Portfolio & Client Intelligence
+
+The application supports a portfolio-linked client intelligence flow alongside standalone SoW intake:
+
+- **Portfolio Import**: Client records can be imported, validated, searched, and reviewed in the Portfolio console.
+- **Case Linkage**: A portfolio client can be linked directly into a new SoW case so the case carries portfolio context from intake.
+- **Portfolio Snapshot**: The case record preserves the client snapshot, deposited amount, currency, and last case linkage for downstream review.
+- **Financial Consistency Context**: Portfolio exposure is evaluated as contextual financial evidence together with declared income, bank statements, payslips, and the existing deterministic rules.
+- **Status Synchronization**: Portfolio client status updates when linked SoW cases are created and processed.
+
+Portfolio exposure is contextual financial information. It must not be treated as an automatic AML violation by itself; the system evaluates portfolio exposure together with declared income, bank evidence, payslip evidence, and deterministic rules.
 
 ---
 
@@ -203,14 +215,39 @@ Financial institutions and wealth managers face severe operational friction when
           Immutable decision state & compliance dossier export
 ```
 
+### Case Intake Modes
+
+#### Portfolio Mode
+
+Portfolio-linked cases are created when a customer is already present in the Portfolio console and a SoW case is opened from that client profile.
+
+1. Portfolio client is selected or imported.
+2. SoW case is created with portfolio snapshot data attached.
+3. Bank statement and payslip evidence are uploaded and processed.
+4. Portfolio Financial Consistency is evaluated together with the existing deterministic SoW rules.
+5. Risk score, rule outcomes, and final decision are generated.
+6. Portfolio client status is updated after case processing.
+
+#### Standalone Mode
+
+Standalone SoW cases are created directly from the New SoW Case screen with no portfolio client attached.
+
+1. No portfolio client is linked to the case.
+2. No portfolio exposure is attached to the intake payload.
+3. The Portfolio Financial Consistency rule is not activated.
+4. Existing deterministic SoW evaluation continues unchanged.
+5. Risk score and final decision are generated from the submitted evidence only.
+
+Portfolio exposure is contextual financial information, not an automatic AML violation. The engine considers exposure, declared income, bank evidence, payslip evidence, and deterministic rules together.
+
 ---
 
 ## 📐 System Architecture
 
 ```mermaid
 graph TD
-    User[Client Browser / Officer Console] -->|HTTPS / Next.js App Router| Frontend[Next.js 15 Client Layer]
-    Frontend -->|API Calls / Server Actions| Server[Next.js 15 Server Layer]
+    User[Client Browser / Officer Console] -->|HTTPS / Next.js App Router| Frontend[Next.js 16 Client Layer]
+    Frontend -->|API Calls / Server Actions| Server[Next.js 16 Server Layer]
     
     subgraph Privacy & Security Boundary
         Server -->|Raw Document Text| PII[PII Sanitization Engine]
@@ -225,7 +262,7 @@ graph TD
     end
     
     subgraph Compliance & Storage Layer
-        Rules -->|Risk Score & Flags| Store[(In-Memory / Persistent Store)]
+        Rules -->|Risk Score & Flags| Store[(Local Persistent Store)]
         Rules -->|Payload & Meta| Ledger[Cryptographic SHA-256 Ledger]
         Ledger -->|Linked Audit Blocks| Store
     end
@@ -255,7 +292,7 @@ sequenceDiagram
     PII-->>API: Return Redacted Text + Token Map
     API->>AI: Generate Content (Prompt + Redacted Text)
     AI-->>API: Return Extracted Deposits & Salary JSON
-    API->>Rules: Evaluate Ratio (<= 1.25x) & Employer Match
+    API->>Rules: Evaluate Ratio (<= 1.25x), Employer Match & Portfolio Context
     Rules-->>API: Return Risk Score, Flags & Verdict
     API->>Audit: Append Block (Seq, PrevHash, PayloadHash, Signature)
     Audit-->>API: Audit Chain Validated
@@ -287,7 +324,7 @@ Luxera Provenance strictly isolates deterministic calculations from AI reasoning
 Luxera Provenance enforces multiple security controls:
 
 1. **Server-Side API Key Protection**: The `GEMINI_API_KEY` is maintained exclusively within server-side environments (`process.env.GEMINI_API_KEY`). It is never exposed to client bundles (`NEXT_PUBLIC_`).
-2. **Binary Content Validation**: Uploaded documents are checked for MIME type integrity (`application/pdf`, `image/png`, `image/jpeg`), size constraints (max 10MB per document), and SHA-256 file hashing.
+2. **Binary Content Validation**: Uploaded documents are checked for MIME type integrity (`application/pdf`, `image/png`, `image/jpeg`, `image/jpg`, `image/pjpeg`), size constraints (max 25MB per document), and SHA-256 file hashing.
 3. **Pre-LLM Data Masking**: All OCR text passes through local PII redaction filters before payload construction, eliminating the risk of third-party model data retention.
 4. **Tamper-Evident Hash Chain**: Audit events are cryptographically bound to the previous block's SHA-256 hash. Any modification to historic audit payloads invalidates the chain signature.
 
@@ -308,7 +345,7 @@ Luxera Provenance is engineered to comply with the **Malaysia Personal Data Prot
 
 ## 🤖 AI & Gemini Multimodal Architecture
 
-Luxera Provenance utilizes the **Google Gemini 2.5 Flash** model via the official `@google/genai` TypeScript SDK (`GoogleGenAI` class) for server-side document extraction and compliance narrative synthesis.
+Luxera Provenance utilizes the **Google Gemini 2.5 Flash** model via the official `@google/genai` TypeScript SDK (`GoogleGenAI` class) for server-side document extraction and compliance narrative synthesis, with deterministic fallback logic when AI execution is unavailable.
 
 ### AI Processing Steps:
 1. **Multimodal Document Parsing**: Passes document OCR text and metadata into Gemini Flash.
@@ -385,13 +422,14 @@ Compliance officers can inspect raw vs redacted document text, review specific r
 
 | Component | Technology | Version / Specification |
 | :--- | :--- | :--- |
-| **Framework** | Next.js (App Router) | `15.4.9` |
-| **UI Runtime** | React | `19.2.1` |
+| **Framework** | Next.js (App Router) | `16.3.1` |
+| **UI Runtime** | React | `19.2.0` |
 | **Language** | TypeScript | `5.9.3` |
 | **Styling** | Tailwind CSS | `4.1.11` |
 | **Animations** | Motion | `12.23.24` |
 | **Icons** | Lucide React | `0.553.0` |
 | **AI SDK** | `@google/genai` | `^2.4.0` (Gemini 2.5 Flash) |
+| **Storage** | Local persistent JSON store | Cases, portfolio clients, documents, and audit blocks |
 | **Workflow Engine** | Native Compliance Engine | Native evaluation & threshold logic |
 | **Cryptography** | Node.js `crypto` | Native SHA-256 Implementation |
 | **Containerization** | Docker / Docker Compose | Production Container Setup |
@@ -403,7 +441,7 @@ Compliance officers can inspect raw vs redacted document text, review specific r
 ```
 luxera-provenance/
 ├── .DOCS/                     # Statutory compliance reference materials & legal docs
-├── app/                       # Next.js 15 App Router directory
+├── app/                       # Next.js 16 App Router directory
 │   ├── api/                   # Server-side API Routes
 │   │   ├── cases/             # Case management, upload & process endpoints
 │   │   ├── compliance/        # DSAR export & audit chain verification endpoints
@@ -431,7 +469,7 @@ luxera-provenance/
 │   │   ├── pii-redactor.ts    # Regex-based pre-LLM PII masking
 │   │   └── sow-engine.ts      # Deterministic rules & Gemini AI engine
 │   └── db/
-│       └── store.ts           # Persistent in-memory compliance store & default seed
+│       └── store.ts           # Persistent local compliance store & default seed
 ├── public/                    # Static branding & asset directory
 │   ├── main-logo.png          # Luxera main logo mark
 │   └── provenance-logo.png    # Luxera Provenance product branding logo
@@ -516,7 +554,7 @@ Refer to `.env.example` to configure environment keys:
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-> 💡 **Self-Contained Architecture Note**: The original Wahed SoW n8n workflow specification is retained inside `.DOCS/JSON/` purely as a reference and source specification. Luxera Provenance implements this entire pipeline natively in application code, removing n8n as a runtime requirement.
+> 💡 **Self-Contained Architecture Note**: The historical external workflow specification is retained inside `.DOCS/JSON/` purely as reference material. Luxera Provenance implements this pipeline natively in application code, removing n8n as a runtime requirement.
 
 ---
 
@@ -585,6 +623,7 @@ Luxera Provenance utilizes an **Institutional Financial Aesthetics** design lang
 Luxera Provenance operates as the specialized financial evidence and compliance intelligence pillar within the broader **Luxera Cognitive Resources** product family:
 
 - **Luxera Provenance**: Financial evidence, Source of Wealth compliance, PII sanitization, and SHA-256 audit infrastructure.
+- **Portfolio Intelligence**: Client import, exposure snapshotting, linked case creation, and portfolio status tracking.
 - **Luxera Outreach Intelligence Platform**: B2B revenue intelligence, AI-powered lead discovery, and outbound campaign automation.
 - **Kalman Lumiere / Ownsify**: Proprietary decision and resource optimization systems developed under the Luxera ecosystem.
 
@@ -614,7 +653,8 @@ By turning raw, noisy documents into structured intelligence, organizations achi
 - [x] Server-side Gemini 2.5 Flash Multimodal Document Extraction.
 - [x] Cryptographic SHA-256 Hash Chained Audit Ledger with live verification API.
 - [x] Human-in-the-Loop Officer Override Console.
-- [x] Native Reimplementation of Wahed SoW Compliance Workflow.
+- [x] Portfolio client import, case linkage, and portfolio financial consistency evaluation.
+- [x] Native SoW compliance workflow with standalone and portfolio intake modes.
 
 ### Next Phase (`v0.2.0` - In Development)
 - [ ] PostgreSQL / Supabase persistent database adapter via Drizzle ORM.

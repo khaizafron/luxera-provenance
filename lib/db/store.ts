@@ -335,15 +335,38 @@ class Store {
         } catch (_) {}
       }
 
-      try {
-        fs.renameSync(tempPath, filePath);
-      } catch (renameErr) {
-        if (fs.existsSync(filePath)) {
+      let renamed = false;
+      let lastRenameErr: unknown = null;
+
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          if (fs.existsSync(filePath)) {
+            try {
+              fs.unlinkSync(filePath);
+            } catch (_) {}
+          }
+          fs.renameSync(tempPath, filePath);
+          renamed = true;
+          break;
+        } catch (renameErr) {
+          lastRenameErr = renameErr;
+          if (attempt < 2) {
+            Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 25);
+          }
+        }
+      }
+
+      if (!renamed) {
+        try {
+          fs.copyFileSync(tempPath, filePath);
+          renamed = true;
+        } catch (copyErr) {
+          throw copyErr ?? lastRenameErr;
+        } finally {
           try {
-            fs.unlinkSync(filePath);
+            fs.unlinkSync(tempPath);
           } catch (_) {}
         }
-        fs.renameSync(tempPath, filePath);
       }
 
       try {
