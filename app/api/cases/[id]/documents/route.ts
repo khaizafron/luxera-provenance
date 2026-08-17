@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { dbStore, DocumentRecord } from '@/lib/db/store';
 import { getAuthSession } from '@/lib/auth/session';
 import { redactPII } from '@/lib/compliance/pii-redactor';
-import { extractTextFromDocument } from '@/lib/compliance/ocr-engine';
+import { extractTextFromDocument, type OCRResult } from '@/lib/compliance/ocr-engine';
+import { createDocumentStorageTarget, ensureDocumentStorageDirectory } from '@/lib/storage/document-storage';
 import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
@@ -106,65 +107,71 @@ export async function POST(
         const sha256_hash = createHash('sha256').update(buffer).digest('hex');
 
         const docId = `DOC-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-
-        // 5. Store in Private Local Storage
-        const uploadsDir = path.join(process.cwd(), 'private_uploads');
-        if (!fs.existsSync(uploadsDir)) {
-          fs.mkdirSync(uploadsDir, { recursive: true });
-        }
-        const safeFilename = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-        const filePath = path.join(uploadsDir, safeFilename);
-        fs.writeFileSync(filePath, buffer);
+        const storageTarget = createDocumentStorageTarget(file.name);
         const storageKey = `/api/cases/${sowCase.id}/documents/${docId}`;
+        let ocrRes: OCRResult;
 
-        // 6. Real OCR Text Extraction
-        const ocrRes = await extractTextFromDocument(buffer, mime || 'application/pdf', file.name);
-
-        // 7. PII Sanitization
-        let piiRedacted = '';
-        if (ocrRes.extractedText) {
-          piiRedacted = redactPII(ocrRes.extractedText).redactedText;
-        }
-
-        // 8. Create DB Document Record
-        const newDoc: DocumentRecord = {
-          id: docId,
-          case_id: sowCase.id,
-          organization_id: sowCase.organization_id,
-          filename: file.name,
-          file_type: classification,
-          file_size: file.size,
-          mime_type: mime || (ext === '.pdf' ? 'application/pdf' : 'image/png'),
-          sha256_hash,
-          url: storageKey,
-          storage_path: filePath,
-          ocr_extracted_text: ocrRes.extractedText,
-          pii_redacted_text: piiRedacted,
-          upload_status: 'COMPLETED',
-          ocr_status: ocrRes.ocrStatus,
-          uploaded_by: session.user.id,
-          created_at: new Date().toISOString(),
-        };
-
-        dbStore.documents.set(newDoc.id, newDoc);
-        createdDocs.push(newDoc);
-
-        // 9. Add Hash Chained Audit Event
-        dbStore.addAuditBlock(
-          sowCase.id,
-          sowCase.organization_id,
-          'DOCUMENT_UPLOADED',
-          session.user.id,
-          session.user.email,
-          {
-            document_id: newDoc.id,
-            filename: newDoc.filename,
-            file_type: newDoc.file_type,
-            file_size: newDoc.file_size,
-            sha256_hash: newDoc.sha256_hash,
-            ocr_status: newDoc.ocr_status,
+        try {
+          if (!storageTarget.isEphemeral) {
+            ensureDocumentStorageDirectory(storageTarget.filePath);
+            fs.writeFileSync(storageTarget.filePath, buffer);
+          } else {
+            // Production/serverless: keep only a temporary working copy while OCR runs.
+            ensureDocumentStorageDirectory(storageTarget.filePath);
+            fs.writeFileSync(storageTarget.filePath, buffer);
           }
-        );
+
+          // 5. Real OCR Text Extraction
+          ocrRes = await extractTextFromDocument(buffer, mime || 'application/pdf', file.name);
+
+          // 6. PII Sanitization
+          let piiRedacted = '';
+          if (ocrRes.extractedText) {
+            piiRedacted = redactPII(ocrRes.extractedText).redactedText;
+          }
+
+          // 7. Create DB Document Record
+          const newDoc: DocumentRecord = {
+            id: docId,
+            case_id: sowCase.id,
+            organization_id: sowCase.organization_id,
+            filename: file.name,
+            file_type: classification,
+            file_size: file.size,
+            mime_type: mime || (ext === '.pdf' ? 'application/pdf' : 'image/png'),
+            sha256_hash,
+            url: storageKey,
+            storage_path: storageTarget.isEphemeral ? undefined : storageTarget.filePath,
+            ocr_extracted_text: ocrRes.extractedText,
+            pii_redacted_text: piiRedacted,
+            upload_status: 'COMPLETED',
+            ocr_status: ocrRes.ocrStatus,
+            uploaded_by: session.user.id,
+            created_at: new Date().toISOString(),
+          };
+
+          dbStore.documents.set(newDoc.id, newDoc);
+          createdDocs.push(newDoc);
+
+          // 8. Add Hash Chained Audit Event
+          dbStore.addAuditBlock(
+            sowCase.id,
+            sowCase.organization_id,
+            'DOCUMENT_UPLOADED',
+            session.user.id,
+            session.user.email,
+            {
+              document_id: newDoc.id,
+              filename: newDoc.filename,
+              file_type: newDoc.file_type,
+              file_size: newDoc.file_size,
+              sha256_hash: newDoc.sha256_hash,
+              ocr_status: newDoc.ocr_status,
+            }
+          );
+        } finally {
+          storageTarget.cleanup();
+        }
       }
 
       return NextResponse.json({ documents: createdDocs }, { status: 201 });
@@ -182,15 +189,12 @@ export async function POST(
     const piiRedacted = file_text_content ? redactPII(file_text_content).redactedText : '';
 
     const docId = `DOC-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-    
-    // Write physical private file for text content to enable downloading if needed
-    const uploadsDir = path.join(process.cwd(), 'private_uploads');
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
+
+    const storageTarget = createDocumentStorageTarget(filename);
+    if (!storageTarget.isEphemeral) {
+      ensureDocumentStorageDirectory(storageTarget.filePath);
+      fs.writeFileSync(storageTarget.filePath, Buffer.from(file_text_content || ''));
     }
-    const safeFilename = `${Date.now()}_${filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-    const filePath = path.join(uploadsDir, safeFilename);
-    fs.writeFileSync(filePath, Buffer.from(file_text_content || ''));
 
     const newDoc: DocumentRecord = {
       id: docId,
@@ -202,7 +206,7 @@ export async function POST(
       mime_type: filename.endsWith('.pdf') ? 'application/pdf' : 'image/png',
       sha256_hash,
       url: `/api/cases/${sowCase.id}/documents/${docId}`,
-      storage_path: filePath,
+      storage_path: storageTarget.isEphemeral ? undefined : storageTarget.filePath,
       ocr_extracted_text: file_text_content || '',
       pii_redacted_text: piiRedacted,
       upload_status: 'COMPLETED',
@@ -226,6 +230,8 @@ export async function POST(
         sha256_hash: newDoc.sha256_hash,
       }
     );
+
+    storageTarget.cleanup();
 
     return NextResponse.json({ documents: [newDoc] }, { status: 201 });
   } catch (error: unknown) {
